@@ -56,7 +56,7 @@ const Header = () => {
             <svg className={css["icon-cart"]}>
               <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#bag`} />
             </svg>
-            <span className={css.count}>2</span>
+            <span className={css.count}>1</span>
           </Link>
         </div>
       </div>
