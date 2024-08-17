@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../utils/routes.js";
 
-import logo from "../../img/logo.svg";
+import logo from "../../image/logo.svg";
 
 import css from "../../styles/Footer.module.css";
 

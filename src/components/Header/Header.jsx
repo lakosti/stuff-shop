@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 import { ROUTES } from "../../utils/routes.js";
 
-import logo from "../../img/logo.svg";
-import avatar from "../../img/avatar.svg";
+import logo from "../../image/logo.svg";
+import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
 
@@ -21,6 +21,7 @@ const Header = () => {
           <div
             className={css.avatar}
             style={{
+              backgroundSize: "auto",
               backgroundImage: `url(${avatar})`,
             }}
           />

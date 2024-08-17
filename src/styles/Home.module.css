@@ -72,7 +72,7 @@
   position: absolute;
 }
 
-.left:before {
+/* .left:before {
   width: 204px;
   height: 170px;
   left: -25px;
@@ -86,7 +86,7 @@
   right: -25px;
   bottom: -25px;
   background: url(../images/devices.png) no-repeat center/contain;
-}
+} */
 
 .content {
   color: var(--violet);
