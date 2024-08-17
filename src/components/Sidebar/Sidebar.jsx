@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
-import css from "../../styles/Sidebar.module.css";
 import { useSelector } from "react-redux";
 
+import css from "../../styles/Sidebar.module.css";
+
 const Sidebar = () => {
-  const list = useSelector((state) => state.categories.list);
+  const list = useSelector((state) => state.categories.categoriesList);
   const loading = useSelector((state) => state.categories.isLoading);
 
   return (

@@ -4,9 +4,9 @@ import { BASE_URL } from "../../../utils/constants.js";
 
 import axios from "axios";
 
-// state -- СХОВИЩЕ
+// STATE -- СХОВИЩЕ
 const initialState = {
-  list: [],
+  categoriesList: [],
   isLoading: false,
 };
 
@@ -19,7 +19,7 @@ const categoriesSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getCategories.fulfilled, (state, action) => {
-      state.list = action.payload; //записуємо в list дані з акшену
+      state.categoriesList = action.payload; //записуємо в categoriesList дані з акшену (асинхрон функції)
       state.isLoading = false;
     });
     builder.addCase(getCategories.rejected, (state) => {
