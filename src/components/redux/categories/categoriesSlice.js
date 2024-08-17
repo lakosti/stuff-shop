@@ -4,13 +4,13 @@ import { BASE_URL } from "../../../utils/constants.js";
 
 import axios from "axios";
 
-// state
+// state -- СХОВИЩЕ
 const initialState = {
   list: [],
   isLoading: false,
 };
 
-//slice
+//slice -- УПРАВЛІННЯ СХОВИЩЕМ
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
@@ -22,13 +22,13 @@ const categoriesSlice = createSlice({
       state.list = action.payload; //записуємо в list дані з акшену
       state.isLoading = false;
     });
-    builder.addCase(getCategories.rejected, (state, action) => {
+    builder.addCase(getCategories.rejected, (state) => {
       state.isLoading = false;
     });
   },
 });
 
-//async fn
+//async fn -- ЗАПИТ ДО БАЗИ
 export const getCategories = createAsyncThunk("categories/getCategories", async (_, thunkAPI) => {
   try {
     const res = await axios.get(`${BASE_URL}/categories`);
