@@ -7,7 +7,7 @@ import axios from "axios";
 // state -- СХОВИЩЕ
 const initialState = {
   productsList: [],
-  //   filtered: [],
+  filtered: [],
   //   related: [],
   isLoading: false,
 };
@@ -16,6 +16,12 @@ const initialState = {
 const productsSlice = createSlice({
   name: "products",
   initialState,
+  reducers: {
+    filteredByPrice: (state, { payload }) => {
+      //фільтруємо уже наявні в нас продукти і отримуємо ціну менше 100
+      state.filtered = state.productsList.filter(({ price }) => price < payload); // у payload будемо класти ціну
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getProducts.pending, (state) => {
       state.isLoading = true;
@@ -41,5 +47,7 @@ export const getProducts = createAsyncThunk("products/getProducts", async (_, th
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+export const { filteredByPrice } = productsSlice.actions;
 
 export default productsSlice.reducer;

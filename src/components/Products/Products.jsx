@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import css from "../../styles/Products.module.css";
-
-// import { useState } from "react";
-import { useSelector } from "react-redux";
 
 import Loader from "../Loader/Loader.jsx";
 
@@ -17,7 +15,6 @@ const Products = ({ title, style = {}, amount, products = [] }) => {
   // };
 
   const loading = useSelector((state) => state.products.isLoading);
-
   const productsList = products.filter((_, i) => i !== 0 && i < amount); //якщо i менше amount воно зберігає його до нового масиву (оскільки у першого немає фото то ми його пропускаємо)
 
   return (
