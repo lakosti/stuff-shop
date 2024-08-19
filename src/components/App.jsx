@@ -20,12 +20,10 @@ const App = () => {
   return (
     <div className="app">
       <Header />
-
       <div className="container">
         <Sidebar />
         <AppRoutes />
       </div>
-
       <Footer />
     </div>
   );

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import css from "../../styles/Sidebar.module.css";
+import Loader from "../Loader/Loader.jsx";
 
 const Sidebar = () => {
   const list = useSelector((state) => state.categories.categoriesList);
@@ -12,14 +13,7 @@ const Sidebar = () => {
       <div className={css.title}>categories</div>
       <nav>
         {loading ? (
-          <p
-            style={{
-              textTransform: "uppercase",
-              marginTop: "20px",
-            }}
-          >
-            Loading...
-          </p>
+          <Loader>Loading</Loader>
         ) : (
           <ul className={css.menu}>
             {list.map(({ name, id }) => (

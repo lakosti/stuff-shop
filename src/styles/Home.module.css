@@ -72,12 +72,12 @@
   position: absolute;
 }
 
-/* .left:before {
+.left:before {
   width: 204px;
   height: 170px;
   left: -25px;
   bottom: 74px;
-  background: url(../images/shoe.png) no-repeat center/contain;
+  background: url(../image/shoe.png) no-repeat center/contain;
 }
 
 .left:after {
@@ -85,12 +85,13 @@
   height: 151px;
   right: -25px;
   bottom: -25px;
-  background: url(../images/devices.png) no-repeat center/contain;
-} */
+  background: url(../image/devices.png) no-repeat center/contain;
+}
 
 .content {
   color: var(--violet);
   font-weight: 300;
+  text-transform: uppercase;
   font-size: 70px;
   line-height: 85px;
   text-align: center;
