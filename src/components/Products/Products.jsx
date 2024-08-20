@@ -13,7 +13,6 @@ const Products = ({ title, style = {}, amount, products = [] }) => {
   // const handleClick = () => {
   //   setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 5); // Додаємо ще 5 нових продуктів
   // };
-  //! попробувати створити перевірку на довжину масиву картинок (якщо довжина !== 3 return)
 
   const loading = useSelector((state) => state.products.isLoading);
   const list = products.filter((_, i) => i !== 0 && i < amount); //якщо i менше amount воно зберігає його до нового масиву (оскільки у першого немає фото то ми його пропускаємо)

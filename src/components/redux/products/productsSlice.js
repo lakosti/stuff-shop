@@ -40,8 +40,9 @@ const productsSlice = createSlice({
 export const getProducts = createAsyncThunk("products/getProducts", async (_, thunkAPI) => {
   try {
     const res = await axios.get(`${BASE_URL}/products`);
+
+    //фільтруємо щоб отримувати вірний шлях до картинок
     const filteredData = res.data.filter((item) => item.images.length === 3);
-    console.log(filteredData);
     return filteredData;
   } catch (error) {
     console.log(error);
