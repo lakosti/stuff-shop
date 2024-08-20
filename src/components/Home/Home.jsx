@@ -10,45 +10,41 @@ import Banner from "../Banner/Banner.jsx";
 const Home = () => {
   const dispatch = useDispatch();
 
-  // const products = useSelector((state) => state.products.productsList);
-  // const categories = useSelector((state) => state.categories.categoriesList);
+  const products = useSelector((state) => state.products.list);
+  const filtered = useSelector((state) => state.products.filtered);
+  const categories = useSelector((state) => state.categories.list);
 
-  const {
-    products: { productsList, filtered },
-    categories,
-  } = useSelector((state) => state);
+  // // Функція для перемішування масиву
+  // function shuffleArray(array) {
+  //   for (let i = array.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [array[i], array[j]] = [array[j], array[i]];
+  //   }
+  //   return array;
+  // }
 
-  console.log(productsList);
+  // // Функція для вибору кількох випадкових об'єктів з масиву
+  // function getRandomObjects(array, numberOfObjects) {
+  //   const shuffled = shuffleArray([...array]);
+  //   return shuffled.slice(0, numberOfObjects);
+  // }
+
+  // // Отримання 5 випадкових об'єктів з productsList
+  // const randomObjects = getRandomObjects(productsList, 6);
+
   useEffect(() => {
-    if (!productsList.length) return;
+    if (!products.length) return;
+    console.log(products.length);
 
     //кладемо 100 - price у payload
     dispatch(filteredByPrice(100));
-  }, [dispatch, productsList.length]);
-
-  // Функція для перемішування масиву
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  // Функція для вибору кількох випадкових об'єктів з масиву
-  function getRandomObjects(array, numberOfObjects) {
-    const shuffled = shuffleArray([...array]);
-    return shuffled.slice(0, numberOfObjects);
-  }
-
-  // Отримання 5 випадкових об'єктів з productsList
-  const randomObjects = getRandomObjects(productsList, 6);
+  }, [dispatch, products.length]);
 
   return (
     <>
       <Poster />
-      <Products products={randomObjects} amount={6} title="Trending" />
-      <Categories categories={categories.categoriesList} amount={5} title="Worth seeing" />
+      <Products products={products} amount={6} title="Trending" />
+      <Categories categories={categories.list} amount={5} title="Worth seeing" />
       <Banner />
       <Products products={filtered} amount={6} title="Less than 100$" />
     </>

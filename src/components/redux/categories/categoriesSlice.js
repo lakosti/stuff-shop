@@ -6,7 +6,7 @@ import axios from "axios";
 
 // STATE -- СХОВИЩЕ
 const initialState = {
-  categoriesList: [],
+  list: [],
   isLoading: false,
 };
 
@@ -19,7 +19,7 @@ const categoriesSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getCategories.fulfilled, (state, action) => {
-      state.categoriesList = action.payload; //записуємо в categoriesList дані з акшену (асинхрон функції)
+      state.list = action.payload; //записуємо в categoriesList дані з акшену (асинхрон функції) // результат роботи функції
       state.isLoading = false;
     });
     builder.addCase(getCategories.rejected, (state) => {
@@ -32,7 +32,7 @@ const categoriesSlice = createSlice({
 export const getCategories = createAsyncThunk("categories/getCategories", async (_, thunkAPI) => {
   try {
     const res = await axios.get(`${BASE_URL}/categories`);
-    return res.data.slice(0, 5);
+    return res.data.slice(0, 5); //повертаємо перші 5 категорій
   } catch (error) {
     console.log(error);
     return thunkAPI.rejectWithValue(error);

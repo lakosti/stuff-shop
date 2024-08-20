@@ -13,9 +13,10 @@ const Products = ({ title, style = {}, amount, products = [] }) => {
   // const handleClick = () => {
   //   setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 5); // Додаємо ще 5 нових продуктів
   // };
+  //! попробувати створити перевірку на довжину масиву картинок (якщо довжина !== 3 return)
 
   const loading = useSelector((state) => state.products.isLoading);
-  const productsList = products.filter((_, i) => i !== 0 && i < amount); //якщо i менше amount воно зберігає його до нового масиву (оскільки у першого немає фото то ми його пропускаємо)
+  const list = products.filter((_, i) => i !== 0 && i < amount); //якщо i менше amount воно зберігає його до нового масиву (оскільки у першого немає фото то ми його пропускаємо)
 
   return (
     <section className={css.products} style={style}>
@@ -25,7 +26,7 @@ const Products = ({ title, style = {}, amount, products = [] }) => {
         <>
           {title && <h2>{title}</h2>}
           <div className={css.list}>
-            {productsList.map(({ id, images, title, category: { name: cat }, price }) => (
+            {list.map(({ id, images, title, category: { name: cat }, price }) => (
               <Link to={`/products/${id}`} key={id} className={css.product}>
                 <div className={css.image} style={{ backgroundImage: `url(${images[0]})` }} />
                 <div className={css.wrapper}>

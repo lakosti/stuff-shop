@@ -6,7 +6,7 @@ import axios from "axios";
 
 // state -- СХОВИЩЕ
 const initialState = {
-  productsList: [],
+  list: [],
   filtered: [],
   //   related: [],
   isLoading: false,
@@ -19,7 +19,7 @@ const productsSlice = createSlice({
   reducers: {
     filteredByPrice: (state, { payload }) => {
       //фільтруємо уже наявні в нас продукти і отримуємо ціну менше 100
-      state.filtered = state.productsList.filter(({ price }) => price < payload); // у payload будемо класти ціну
+      state.filtered = state.list.filter(({ price }) => price < payload); // у payload будемо класти ціну
     },
   },
   extraReducers: (builder) => {
@@ -27,7 +27,7 @@ const productsSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getProducts.fulfilled, (state, action) => {
-      state.productsList = action.payload; //записуємо в list дані з акшену
+      state.list = action.payload; //записуємо в list дані з акшену
       state.isLoading = false;
     });
     builder.addCase(getProducts.rejected, (state) => {
@@ -40,8 +40,9 @@ const productsSlice = createSlice({
 export const getProducts = createAsyncThunk("products/getProducts", async (_, thunkAPI) => {
   try {
     const res = await axios.get(`${BASE_URL}/products`);
-    // return res.data.slice(0, 31); //відображаю перші 30 бо далі без фото
-    return res.data;
+    const filteredData = res.data.filter((item) => item.images.length === 3);
+    console.log(filteredData);
+    return filteredData;
   } catch (error) {
     console.log(error);
     return thunkAPI.rejectWithValue(error);

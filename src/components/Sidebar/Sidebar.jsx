@@ -5,7 +5,7 @@ import css from "../../styles/Sidebar.module.css";
 import Loader from "../Loader/Loader.jsx";
 
 const Sidebar = () => {
-  const list = useSelector((state) => state.categories.categoriesList);
+  const list = useSelector((state) => state.categories.list);
   const loading = useSelector((state) => state.categories.isLoading);
 
   return (
