@@ -50,6 +50,16 @@ export const getProducts = createAsyncThunk("products/getProducts", async (_, th
   }
 });
 
+export const getProductById = createAsyncThunk("products/getProductById", async (id, thunkAPI) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/products/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 export const { filteredByPrice } = productsSlice.actions;
 
 export default productsSlice.reducer;
