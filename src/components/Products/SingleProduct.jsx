@@ -7,16 +7,23 @@ import { getProductById } from "../redux/products/productsSlice.js";
 
 import { ROUTES } from "../../utils/routes.js";
 
+import Product from "./Product.jsx";
+
 const SingleProduct = () => {
+  // const { data, isSuccess, isRefreshing, isLoading } = useGetProduct({ id });
+  // if ( !isSuccess && !isRefreshing && !isLoading) {
+  //   navigate(ROUTES.HOME);
+  // }
+
+  const loading = useSelector((state) => state.products.isLoading);
+
   const [product, setProduct] = useState(null);
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const loading = useSelector((state) => state.products.isLoading);
   const navigate = useNavigate();
 
-  // const { data, error, isLoading } = useGetProduct({ id });
-
+  console.log(product);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,6 +34,7 @@ const SingleProduct = () => {
           //створити сторінку Not found
           navigate(ROUTES.HOME);
         }
+        // console.log(payload);
         setProduct(payload);
       } catch (error) {
         console.log(error);
@@ -36,7 +44,21 @@ const SingleProduct = () => {
     fetchData();
   }, [dispatch, id, navigate]);
 
-  return <section>SingleProduct</section>;
+  return (
+    <>
+      {product ? (
+        <Product
+          // title={product.title}
+          // price={product.price}
+          // description={product.description}
+          // images={product.images}
+          {...product}
+        />
+      ) : (
+        <p>Please wait...</p>
+      )}
+    </>
+  );
 };
 
 export default SingleProduct;
