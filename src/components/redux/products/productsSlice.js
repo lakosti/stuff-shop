@@ -37,28 +37,33 @@ const productsSlice = createSlice({
 });
 
 //async fn -- ЗАПИТ ДО БАЗИ
-export const getProducts = createAsyncThunk("products/getProducts", async (_, thunkAPI) => {
-  try {
-    const res = await axios.get(`${BASE_URL}/products`);
+export const getProducts = createAsyncThunk(
+  "products/getProducts",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/products`);
 
-    //фільтруємо щоб отримувати вірний шлях до картинок
-    const filteredData = res.data.filter((item) => item.images.length === 3);
-    return filteredData;
-  } catch (error) {
-    console.log(error);
-    return thunkAPI.rejectWithValue(error);
+      //фільтруємо щоб отримувати вірний шлях до картинок
+      const filteredData = res.data.filter((item) => item.images.length === 3);
+      return filteredData;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const getProductById = createAsyncThunk("products/getProductById", async (id, thunkAPI) => {
-  try {
-    const res = await axios.get(`${BASE_URL}/products/${id}`);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    return thunkAPI.rejectWithValue(error);
+export const getProductById = createAsyncThunk(
+  "products/getProductById",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/products/${id}`);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const { filteredByPrice } = productsSlice.actions;
 
