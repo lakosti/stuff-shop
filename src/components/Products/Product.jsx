@@ -3,11 +3,30 @@ import { Link } from "react-router-dom";
 import css from "../../styles/Product.module.css";
 
 import { ROUTES } from "../../utils/routes.js";
+import { useEffect, useState } from "react";
 
-const SIZES = [4, 4.5, 5];
+const SIZES = ["S", "M", "L"];
 
-const Product = ({ images, title, price, description }) => {
-  const currentImg = images[0];
+const Product = ({ images, title, price, description, id }) => {
+  //змінюємо головну картинку
+  const [currentImg, setCurrentImg] = useState();
+  const [currentSize, setCurrentSize] = useState();
+  const [purchase, setPurchase] = useState();
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setCurrentImg(images[0]);
+    }
+  }, [images]);
+
+  //! зробити щоб покупки змінювались тільки коли змінбєтсья id (при оновленні сторінки все рівно покупки змініються)
+  useEffect(() => {
+    const randomPurchases = (max, min) => {
+      setPurchase(Math.floor(Math.random() * max - min));
+    };
+
+    randomPurchases(30, 1);
+  }, [id]);
 
   return (
     <section className={css.product}>
@@ -19,10 +38,10 @@ const Product = ({ images, title, price, description }) => {
         <div className={css["images-list"]}>
           {images.map((img, i) => (
             <div
-              key={i}
+              key={img}
               className={css.image}
               style={{ backgroundImage: `url(${img})` }}
-              onClick={() => {}}
+              onClick={() => setCurrentImg(img)}
             />
           ))}
         </div>
@@ -35,7 +54,13 @@ const Product = ({ images, title, price, description }) => {
           <span>Sizes: </span>
           <div className={css.list}>
             {SIZES.map((size) => (
-              <div onClick={() => {}} key={size} className={`${css.size}`}>
+              <div
+                onClick={() => setCurrentSize(size)}
+                key={size}
+                className={`${css.size} ${
+                  currentSize === size ? css.active : ""
+                }`}
+              >
                 {size}
               </div>
             ))}
@@ -45,14 +70,14 @@ const Product = ({ images, title, price, description }) => {
         <p className={css.description}>{description}</p>
 
         <div className={css.actions}>
-          <button className={css.add}>Add to cart</button>
+          <button className={css.add} disabled={!currentSize}>
+            Add to cart
+          </button>
           <button className={css.favourite}>Add to favourites</button>
         </div>
 
         <div className={css.bottom}>
-          <div className={css.purchase}>
-            {Math.floor(Math.random() * 30 - 1)} people purchased
-          </div>
+          <div className={css.purchase}>{purchase} people purchased</div>
           <Link to={ROUTES.HOME}>Go to store</Link>
         </div>
       </div>

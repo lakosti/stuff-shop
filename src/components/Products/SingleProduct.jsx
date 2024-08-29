@@ -8,6 +8,7 @@ import { getProductById } from "../redux/products/productsSlice.js";
 import { ROUTES } from "../../utils/routes.js";
 
 import Product from "./Product.jsx";
+import Loader from "../Loader/Loader.jsx";
 
 const SingleProduct = () => {
   // const { data, isSuccess, isRefreshing, isLoading } = useGetProduct({ id });
@@ -55,7 +56,9 @@ const SingleProduct = () => {
           {...product}
         />
       ) : (
-        <p>Please wait...</p>
+        <section>
+          <Loader>Loading</Loader>
+        </section>
       )}
     </>
   );
