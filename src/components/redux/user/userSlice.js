@@ -6,8 +6,9 @@ import axios from "axios";
 
 // STATE -- СХОВИЩЕ
 const initialState = {
-  currentUser: [],
+  currentUser: {},
   cart: [],
+  favourites: [],
   isLoading: false,
 };
 
@@ -51,13 +52,13 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder.addCase(getCategories.pending, (state) => {
-    //   state.isLoading = true;
-    // });
-    // builder.addCase(getCategories.fulfilled, (state, action) => {
-    //   state.list = action.payload; //записуємо в categoriesList дані з акшену (асинхрон функції) // результат роботи функції
-    //   state.isLoading = false;
-    // });
+    builder.addCase(register.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(register.fulfilled, (state, action) => {
+      state.currentUser = action.payload; //дані юзера при реєстрації будуть в payload
+      state.isLoading = false;
+    });
     // builder.addCase(getCategories.rejected, (state) => {
     //   state.isLoading = false;
     // });
@@ -66,18 +67,17 @@ const userSlice = createSlice({
 
 //async fn -- ЗАПИТ ДО БАЗИ
 
-// export const getCategories = createAsyncThunk(
-//   "categories/getCategories",
-//   async (_, thunkAPI) => {
-//     try {
-//       const res = await axios.get(`${BASE_URL}/categories`);
-//       return res.data.slice(0, 5); //повертаємо перші 5 категорій
-//     } catch (error) {
-//       console.log(error);
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const register = createAsyncThunk(
+  "users/createUser",
+  async (body, thunkAPI) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/users`, body); //body -- тіло запиту
+      return res.data; //повертаємо перші 5 категорій
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const { addToCart } = userSlice.actions; //власний редюсер
 

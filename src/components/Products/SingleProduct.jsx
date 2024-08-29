@@ -23,9 +23,11 @@ const SingleProduct = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const releted = useSelector((state) => state.products.related);
+  // const related = useSelector((state) => state.products.related);
+  // const list = useSelector((state) => state.products.list);
+  const { related, list } = useSelector(({ products }) => products);
+
   const loading = useSelector((state) => state.products.isLoading);
-  console.log(releted);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,10 +50,10 @@ const SingleProduct = () => {
   }, [dispatch, id, navigate]);
 
   useEffect(() => {
-    if (product) {
-      dispatch(getRelatedProducts(product.category.id));
-    }
-  }, [dispatch, product]);
+    if (!product || !list.length) return; //якщо немає даних або немає елементів в ліст то виходь
+
+    dispatch(getRelatedProducts(product.category.id));
+  }, [dispatch, product, list.length]);
 
   return (
     <>
@@ -64,7 +66,7 @@ const SingleProduct = () => {
             // images={product.images}
             {...product}
           />
-          <Products products={releted} amount={6} title="Releted products" />
+          <Products products={related} amount={6} title="Releted products" />
         </>
       ) : (
         <section>
