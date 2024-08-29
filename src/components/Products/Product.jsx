@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../utils/routes.js";
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { addToCart } from "../redux/user/userSlice.js";
 
 import css from "../../styles/Product.module.css";
 
-import { ROUTES } from "../../utils/routes.js";
-import { useEffect, useState } from "react";
-
 const SIZES = ["S", "M", "L"];
 
-const Product = ({ images, title, price, description, id }) => {
-  //змінюємо головну картинку
-  const [currentImg, setCurrentImg] = useState();
+const Product = (item) => {
+  const { images, title, price, description, id } = item;
+
+  const dispatch = useDispatch();
+
+  const [currentImg, setCurrentImg] = useState(); //змінюємо головну картинку
   const [currentSize, setCurrentSize] = useState();
   const [purchase, setPurchase] = useState();
 
@@ -22,11 +28,15 @@ const Product = ({ images, title, price, description, id }) => {
   //! зробити щоб покупки змінювались тільки коли змінбєтсья id (при оновленні сторінки все рівно покупки змініються)
   useEffect(() => {
     const randomPurchases = (max, min) => {
-      setPurchase(Math.floor(Math.random() * max - min));
+      setPurchase(Math.floor(Math.random() * max - min) + min);
     };
 
     randomPurchases(30, 1);
   }, [id]);
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(item)); //item = payload
+  };
 
   return (
     <section className={css.product}>
@@ -69,8 +79,13 @@ const Product = ({ images, title, price, description, id }) => {
 
         <p className={css.description}>{description}</p>
 
+        {/* ЗРОБИТИ ТАК ЩОБ ПРИ КЛІКУ НА ADD TO CART ВІДКРИВАЛАСЬ МОДАЛКА */}
         <div className={css.actions}>
-          <button className={css.add} disabled={!currentSize}>
+          <button
+            onClick={handleAddToCart}
+            className={css.add}
+            disabled={!currentSize}
+          >
             Add to cart
           </button>
           <button className={css.favourite}>Add to favourites</button>

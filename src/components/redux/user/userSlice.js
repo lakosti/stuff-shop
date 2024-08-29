@@ -17,14 +17,20 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, { payload }) => {
-      //розпилюємо щоб не переписати корзину якщо додамо ще елемент
+      // Розпилюємо існуючий масив 'cart', щоб створити новий масив 'newCart'
+      // Це робиться для того, щоб уникнути мутації оригінального масиву та створити новий, з яким будемо працювати
       let newCart = [...state.cart];
 
-      //шукаємо елемент по айді
+      // Шукаємо в 'cart' елемент, у якого 'id' збігається з 'id', що передається у 'payload'
       const found = state.cart.find(({ id }) => id === payload.id);
 
-      //якщо такий елемент є то додаємо його з актуальним quantity
+      // Якщо елемент знайдений (тобто 'found' не є undefined):
       if (found) {
+        // Створюємо новий масив 'newCart', де перевіряємо кожен елемент масиву:
+        // Якщо 'id' збігається з 'id' із 'payload', то оновлюємо цей елемент:
+        // Розпилюємо існуючий елемент і оновлюємо його 'quantity':
+        // - Якщо 'quantity' є в 'payload', то беремо його
+        // - Інакше додаємо одиницю до існуючого 'quantity'
         newCart = newCart.map((item) => {
           return item.id === payload.id
             ? {
@@ -32,10 +38,15 @@ const userSlice = createSlice({
                 quantity: payload.quantity || item.quantity + 1,
               }
             : item;
-        }); //якщо такого елементу немає то додаємо його в корзину і додаємо quantity яке = 1
-      } else newCart.push({ ...payload, quantity: 1 });
+        });
+      } else {
+        // Якщо елемент не знайдено:
+        // Додаємо новий елемент до 'newCart', розпилюючи 'payload'
+        // та додаючи 'quantity' зі значенням 1
+        newCart.push({ ...payload, quantity: 1 });
+      }
 
-      //і перезиписуємо корзину
+      // Оновлюємо стан 'cart' з новим значенням 'newCart'
       state.cart = newCart;
     },
   },
@@ -67,5 +78,7 @@ const userSlice = createSlice({
 //     }
 //   }
 // );
+
+export const { addToCart } = userSlice.actions; //власний редюсер
 
 export default userSlice.reducer;
