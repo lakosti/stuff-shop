@@ -3,10 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // import { useGetProductQuery } from "../../api/apiSlice.js";
-import { getProductById } from "../redux/products/productsSlice.js";
+import {
+  getProductById,
+  getRelatedProducts,
+} from "../redux/products/productsSlice.js";
 
 import { ROUTES } from "../../utils/routes.js";
 
+import Products from "./Products.jsx";
 import Product from "./Product.jsx";
 import Loader from "../Loader/Loader.jsx";
 
@@ -15,16 +19,16 @@ const SingleProduct = () => {
   // if ( !isSuccess && !isRefreshing && !isLoading) {
   //   navigate(ROUTES.HOME);
   // }
-
-  const loading = useSelector((state) => state.products.isLoading);
+  const dispatch = useDispatch();
+  const { id } = useParams();
 
   const [product, setProduct] = useState(null);
-  const { id } = useParams();
-  const dispatch = useDispatch();
+  // const [reletedProduct, setReletedProduct] = useState(null);
+  //беремо releted з store
 
+  const loading = useSelector((state) => state.products.isLoading);
   const navigate = useNavigate();
 
-  console.log(product);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,16 +49,29 @@ const SingleProduct = () => {
     fetchData();
   }, [dispatch, id, navigate]);
 
+  useEffect(() => {
+    if (product) {
+      dispatch(getRelatedProducts(product.category.id));
+    }
+  }, [dispatch, product]);
+
   return (
     <>
       {product ? (
-        <Product
-          // title={product.title}
-          // price={product.price}
-          // description={product.description}
-          // images={product.images}
-          {...product}
-        />
+        <>
+          <Product
+            // title={product.title}
+            // price={product.price}
+            // description={product.description}
+            // images={product.images}
+            {...product}
+          />
+          {/* <Products
+            products={}
+            amount={5}
+            title="Releted products"
+          /> */}
+        </>
       ) : (
         <section>
           <Loader>Loading</Loader>

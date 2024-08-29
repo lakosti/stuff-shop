@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { BASE_URL } from "../../../utils/constants.js";
+import { shuffle } from "../../../utils/common.js";
 
 import axios from "axios";
 
@@ -8,7 +9,7 @@ import axios from "axios";
 const initialState = {
   list: [],
   filtered: [],
-  //   related: [],
+  related: [], //рекомендовані
   isLoading: false,
 };
 
@@ -20,6 +21,10 @@ const productsSlice = createSlice({
     filteredByPrice: (state, { payload }) => {
       //фільтруємо уже наявні в нас продукти і отримуємо ціну менше 100
       state.filtered = state.list.filter(({ price }) => price < payload); // у payload будемо класти ціну
+    },
+    getRelatedProducts: (state, { payload }) => {
+      const list = state.list.filter(({ category: { id } }) => id === payload); //витягуємо id з category
+      state.related = shuffle(list);
     },
   },
   extraReducers: (builder) => {
@@ -65,6 +70,6 @@ export const getProductById = createAsyncThunk(
   }
 );
 
-export const { filteredByPrice } = productsSlice.actions;
+export const { filteredByPrice, getRelatedProducts } = productsSlice.actions;
 
 export default productsSlice.reducer;

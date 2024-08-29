@@ -6,6 +6,7 @@ import logo from "../../image/logo.svg";
 import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   return (
@@ -57,7 +58,7 @@ const Header = () => {
             <svg className={css["icon-cart"]}>
               <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#bag`} />
             </svg>
-            <span className={css.count}>1</span>
+            <span className={css.count}>2</span>
           </Link>
         </div>
       </div>
