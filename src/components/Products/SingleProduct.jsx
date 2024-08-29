@@ -20,14 +20,12 @@ const SingleProduct = () => {
   //   navigate(ROUTES.HOME);
   // }
   const dispatch = useDispatch();
-  const { id } = useParams();
-
-  const [product, setProduct] = useState(null);
-  // const [reletedProduct, setReletedProduct] = useState(null);
-  //беремо releted з store
-
-  const loading = useSelector((state) => state.products.isLoading);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const releted = useSelector((state) => state.products.related);
+  const loading = useSelector((state) => state.products.isLoading);
+  console.log(releted);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,11 +64,7 @@ const SingleProduct = () => {
             // images={product.images}
             {...product}
           />
-          {/* <Products
-            products={}
-            amount={5}
-            title="Releted products"
-          /> */}
+          <Products products={releted} amount={6} title="Releted products" />
         </>
       ) : (
         <section>

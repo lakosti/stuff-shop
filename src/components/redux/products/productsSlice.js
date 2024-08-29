@@ -24,6 +24,7 @@ const productsSlice = createSlice({
     },
     getRelatedProducts: (state, { payload }) => {
       const list = state.list.filter(({ category: { id } }) => id === payload); //витягуємо id з category
+      //в payload ми сам кладемо дані -  і це буде id
       state.related = shuffle(list);
     },
   },

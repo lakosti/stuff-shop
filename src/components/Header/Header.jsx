@@ -6,7 +6,6 @@ import logo from "../../image/logo.svg";
 import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
-import { useSelector } from "react-redux";
 
 const Header = () => {
   return (
