@@ -10,6 +10,8 @@ const initialState = {
   cart: [],
   favourites: [],
   isLoading: false,
+  formType: "register",
+  showForm: false,
 };
 
 //slice -- УПРАВЛІННЯ СХОВИЩЕМ
@@ -37,13 +39,15 @@ const userSlice = createSlice({
             ? {
                 ...item,
                 quantity: payload.quantity || item.quantity + 1,
+                size: payload.size || item.size, // Оновлюємо розмір
               }
             : item;
         });
       } else {
         // Якщо елемент не знайдено:
         // Додаємо новий елемент до 'newCart', розпилюючи 'payload'
-        // та додаючи 'quantity' зі значенням 1
+        // та додаючи 'quantity' зі значенням 1 як початкове значення
+        // newCart.push({ payload, quantity: 1 }); // буде додаватись кожен раз коли змінюється кількість
         newCart.push({ ...payload, quantity: 1 });
       }
 
@@ -59,9 +63,6 @@ const userSlice = createSlice({
       state.currentUser = action.payload; //дані юзера при реєстрації будуть в payload
       state.isLoading = false;
     });
-    // builder.addCase(getCategories.rejected, (state) => {
-    //   state.isLoading = false;
-    // });
   },
 });
 

@@ -49,7 +49,7 @@ export const getProducts = createAsyncThunk(
     try {
       const res = await axios.get(`${BASE_URL}/products`);
 
-      //фільтруємо щоб отримувати вірний шлях до картинок
+      //фільтруємо щоб отримувати вірний шлях до картинок бо кривий бек
       const filteredData = res.data.filter((item) => item.images.length === 3);
       return filteredData;
     } catch (error) {

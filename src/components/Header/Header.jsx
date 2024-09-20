@@ -6,8 +6,18 @@ import logo from "../../image/logo.svg";
 import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
+import { useSelector } from "react-redux";
+// import { useEffect } from "react";
 
 const Header = () => {
+  //*потрібно зрозуміти чи є зараз залогінений користувач, якщо да показуємо модалку
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  const quantity = useSelector((state) => state.user.cart);
+
+  const handleClick = () => {
+    if (!currentUser) return; //якщо немає юзера то нічого не роби
+  };
   return (
     <div className={css.header}>
       <div className={css.logo}>
@@ -17,7 +27,7 @@ const Header = () => {
       </div>
 
       <div className={css.info}>
-        <div className={css.user}>
+        <div className={css.user} onClick={handleClick}>
           <div
             className={css.avatar}
             style={{
@@ -57,7 +67,7 @@ const Header = () => {
             <svg className={css["icon-cart"]}>
               <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#bag`} />
             </svg>
-            <span className={css.count}>2</span>
+            <span className={css.count}>{quantity.length || 0}</span>
           </Link>
         </div>
       </div>

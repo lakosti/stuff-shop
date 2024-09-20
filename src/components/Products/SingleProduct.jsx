@@ -52,7 +52,7 @@ const SingleProduct = () => {
   useEffect(() => {
     if (!product || !list.length) return; //якщо немає даних або немає елементів в ліст то виходь
 
-    dispatch(getRelatedProducts(product.category.id));
+    dispatch(getRelatedProducts(product.category.id)); // по айді категорії шукаємо такі самі товари з даної категорії
   }, [dispatch, product, list.length]);
 
   return (

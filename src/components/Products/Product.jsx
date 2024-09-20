@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../utils/routes.js";
 
@@ -16,7 +18,7 @@ const Product = (item) => {
   const dispatch = useDispatch();
 
   const [currentImg, setCurrentImg] = useState(); //змінюємо головну картинку
-  const [currentSize, setCurrentSize] = useState();
+  const [currentSize, setCurrentSize] = useState("");
   const [purchase, setPurchase] = useState();
 
   useEffect(() => {
@@ -25,6 +27,7 @@ const Product = (item) => {
     }
   }, [images]);
 
+  //!зробити додавання кількості через кнопку + зробити кнопку add to btn disabled якщо товар уже в корзині
   //! зробити щоб покупки змінювались тільки коли змінбєтсья id (при оновленні сторінки все рівно покупки змініються)
   useEffect(() => {
     const randomPurchases = (max, min) => {
@@ -34,8 +37,20 @@ const Product = (item) => {
     randomPurchases(30, 1);
   }, [id]);
 
+  const handleSizeSelect = (size) => {
+    setCurrentSize(size); // Оновлюємо вибраний розмір
+  };
+
   const handleAddToCart = () => {
-    dispatch(addToCart(item)); //item = payload
+    dispatch(addToCart({ ...item, size: currentSize })); //item = payload
+    toast("Successfully added to cart!", {
+      icon: "👏",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   return (
@@ -65,7 +80,7 @@ const Product = (item) => {
           <div className={css.list}>
             {SIZES.map((size) => (
               <div
-                onClick={() => setCurrentSize(size)}
+                onClick={() => handleSizeSelect(size)}
                 key={size}
                 className={`${css.size} ${
                   currentSize === size ? css.active : ""

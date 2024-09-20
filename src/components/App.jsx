@@ -1,3 +1,5 @@
+import { Toaster } from "react-hot-toast";
+
 import AppRoutes from "./AppRoutes/AppRoutes.jsx";
 import Header from "./Header/Header.jsx";
 import Footer from "./Footer/Footer.jsx";
@@ -19,6 +21,9 @@ const App = () => {
 
   return (
     <div className="app">
+      <div>
+        <Toaster position="top-right" />
+      </div>
       <Header />
       <div className="container">
         <Sidebar />
