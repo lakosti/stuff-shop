@@ -6,7 +6,7 @@ import { ROUTES } from "../../utils/routes.js";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { addToCart } from "../redux/user/userSlice.js";
+import { addToCart, addToFavourites } from "../redux/user/userSlice.js";
 
 import css from "../../styles/Product.module.css";
 
@@ -51,6 +51,10 @@ const Product = (item) => {
         color: "#fff",
       },
     });
+  };
+
+  const handleAddToFavList = () => {
+    dispatch(addToFavourites(item));
   };
 
   return (
@@ -103,7 +107,9 @@ const Product = (item) => {
           >
             Add to cart
           </button>
-          <button className={css.favourite}>Add to favourites</button>
+          <button className={css.favourite} onClick={handleAddToFavList}>
+            Add to favourites
+          </button>
         </div>
 
         <div className={css.bottom}>

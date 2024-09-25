@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { ROUTES } from "../../utils/routes.js";
@@ -6,18 +7,20 @@ import logo from "../../image/logo.svg";
 import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
-import { useSelector } from "react-redux";
-// import { useEffect } from "react";
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   //*потрібно зрозуміти чи є зараз залогінений користувач, якщо да показуємо модалку
   const currentUser = useSelector((state) => state.user.currentUser);
-
   const quantity = useSelector((state) => state.user.cart);
 
+  //якщо немає юзера покажи моддалку для реєстрації
   const handleClick = () => {
-    if (!currentUser) return; //якщо немає юзера то нічого не роби
+    if (!currentUser) {
+    }
   };
+
   return (
     <div className={css.header}>
       <div className={css.logo}>

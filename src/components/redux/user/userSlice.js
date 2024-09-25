@@ -11,7 +11,7 @@ const initialState = {
   favourites: [],
   isLoading: false,
   formType: "register",
-  showForm: false,
+  showModal: false,
 };
 
 //slice -- УПРАВЛІННЯ СХОВИЩЕМ
@@ -19,6 +19,19 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    addToFavourites: (state, { payload }) => {
+      //*створюємо копію щоб не мутувати ориг стейт (і не перезаписувати кожного разу значення)
+
+      let favList = [...state.favourites];
+
+      const item = favList.find(({ id }) => id === payload.id);
+
+      if (!item) {
+        favList.push(payload);
+      }
+
+      state.favourites = favList;
+    },
     addToCart: (state, { payload }) => {
       // Розпилюємо існуючий масив 'cart', щоб створити новий масив 'newCart'
       // Це робиться для того, щоб уникнути мутації оригінального масиву та створити новий, з яким будемо працювати
@@ -80,6 +93,6 @@ export const register = createAsyncThunk(
   }
 );
 
-export const { addToCart } = userSlice.actions; //власний редюсер
+export const { addToCart, addToFavourites } = userSlice.actions; //власний редюсер
 
 export default userSlice.reducer;
