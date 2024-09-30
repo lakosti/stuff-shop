@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 import { getCategories } from "./redux/categories/categoriesSlice.js";
 import { getProducts } from "./redux/products/productsSlice.js";
+import AuthForm from "./User/AuthForm.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const App = () => {
         <Toaster position="top-right" />
       </div>
       <Header />
+      <AuthForm />
       <div className="container">
         <Sidebar />
         <AppRoutes />

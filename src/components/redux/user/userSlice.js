@@ -6,7 +6,7 @@ import axios from "axios";
 
 // STATE -- СХОВИЩЕ
 const initialState = {
-  currentUser: {},
+  currentUser: null,
   cart: [],
   favourites: [],
   isLoading: false,
@@ -19,6 +19,9 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    toggleForm: (state, { payload }) => {
+      state.showModal = payload;
+    },
     addToFavourites: (state, { payload }) => {
       //*створюємо копію щоб не мутувати ориг стейт (і не перезаписувати кожного разу значення)
 
@@ -93,6 +96,6 @@ export const register = createAsyncThunk(
   }
 );
 
-export const { addToCart, addToFavourites } = userSlice.actions; //власний редюсер
+export const { addToCart, addToFavourites, toggleForm } = userSlice.actions; //власний редюсер
 
 export default userSlice.reducer;

@@ -7,6 +7,7 @@ import logo from "../../image/logo.svg";
 import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
+import { toggleForm } from "../redux/user/userSlice.js";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -15,10 +16,9 @@ const Header = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.user.cart);
 
-  //якщо немає юзера покажи моддалку для реєстрації
+  //*якщо немає юзера покажи моддалку для реєстрації
   const handleClick = () => {
-    if (!currentUser) {
-    }
+    if (!currentUser) dispatch(toggleForm(true));
   };
 
   return (

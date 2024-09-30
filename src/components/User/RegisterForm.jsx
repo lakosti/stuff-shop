@@ -1,7 +1,12 @@
 import { useState } from "react";
 import css from "../../styles/User.module.css";
+import { useDispatch } from "react-redux";
+import { toggleForm } from "../redux/user/userSlice.js";
 
 const RegisterForm = () => {
+  const dispatch = useDispatch();
+  const closeForm = (value) => dispatch(toggleForm(value));
+
   const [values, setValues] = useState({
     email: "",
     name: "",
@@ -15,7 +20,7 @@ const RegisterForm = () => {
   };
   return (
     <div className={css.wrapper}>
-      <div className={css.close}>
+      <div className={css.close} onClick={() => closeForm(false)}>
         <svg className="icon">
           <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#close`} />
         </svg>
