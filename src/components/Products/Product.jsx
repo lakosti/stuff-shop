@@ -54,6 +54,7 @@ const Product = (item) => {
   };
 
   const handleAddToFavList = () => {
+    //!зробити перевірку чи залогінений користувач, якщо ні показувати модалку для реєстрації
     dispatch(addToFavourites(item));
   };
 
