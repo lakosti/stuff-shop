@@ -1,11 +1,13 @@
 import { useState } from "react";
-import css from "../../styles/User.module.css";
-import { useDispatch } from "react-redux";
-import { toggleForm } from "../redux/user/userSlice.js";
 
-const RegisterForm = () => {
-  const dispatch = useDispatch();
-  const closeForm = (value) => dispatch(toggleForm(value));
+import css from "../../styles/User.module.css";
+
+const RegisterForm = ({ closeForm }) => {
+  const [errors, setErrors] = useState({
+    email: "",
+    name: "",
+    password: "",
+  });
 
   const [values, setValues] = useState({
     email: "",
@@ -16,18 +18,41 @@ const RegisterForm = () => {
 
   //беремо динамічні значення з полів вводу через таргет
   const handleChange = (evt) => {
-    setValues({ ...values, [evt.target.name]: evt.target.value });
+    setValues({ ...values, [evt.target.name]: evt.target.value }); // values розпилюємо ті значення які уже є
+    setErrors({ ...errors, [evt.target.name]: "" });
   };
+
+  //*робимо відправку форми
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    //перевіряємо чи всі значення введені (легка перевірка) (чи value === true)
+    // const isEmpty = Object.values(values).every((value) => value);
+    // if (isEmpty) return;
+
+    // перевіряємо чи всі поля заповнені
+    let newErrors = {};
+    if (!values.email) newErrors.email = "Email is required!";
+    if (!values.name) newErrors.name = "Name is required!";
+    if (!values.password) newErrors.password = "Password is required!";
+
+    // якщо є помилки, оновлюємо стан і не виконуємо сабміт
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+  };
+
   return (
     <div className={css.wrapper}>
-      <div className={css.close} onClick={() => closeForm(false)}>
+      <div className={css.close} onClick={closeForm}>
         <svg className="icon">
           <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#close`} />
         </svg>
       </div>
 
-      <di className={css.title}>Sign Up</di>
-      <form className={css.form}>
+      <div className={css.title}>Sign Up</div>
+      <form className={css.form} onSubmit={handleSubmit}>
         <div className={css.group}>
           <input
             type="email"
@@ -38,6 +63,7 @@ const RegisterForm = () => {
             required
             onChange={handleChange}
           />
+          {errors.email && <p className={css.error}>{errors.email}</p>}
         </div>
         <div className={css.group}>
           <input
@@ -49,6 +75,7 @@ const RegisterForm = () => {
             required
             onChange={handleChange}
           />
+          {errors.name && <p className={css.error}>{errors.name}</p>}
         </div>
         <div className={css.group}>
           <input
@@ -60,6 +87,7 @@ const RegisterForm = () => {
             required
             onChange={handleChange}
           />
+          {errors.password && <p className={css.error}>{errors.password}</p>}
         </div>
         {/* //! спробувати додати можливість завантажувати файли, апі це дозволяє робити */}
         <div className={css.group}>
@@ -69,7 +97,6 @@ const RegisterForm = () => {
             name="avatar"
             value={values.avatar}
             autoComplete="off"
-            required
             onChange={handleChange}
           />
         </div>

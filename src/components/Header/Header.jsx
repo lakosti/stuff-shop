@@ -16,7 +16,7 @@ const Header = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.user.cart);
 
-  //*якщо немає юзера покажи моддалку для реєстрації
+  //*якщо немає юзера (не зареєстрований) покажи моддалку для реєстрації
   const handleClick = () => {
     if (!currentUser) dispatch(toggleForm(true));
   };

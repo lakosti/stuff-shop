@@ -9,12 +9,12 @@ const AuthForm = () => {
   const dispatch = useDispatch();
   const showModal = useSelector((state) => state.user.showModal);
 
-  const closeForm = (value) => dispatch(toggleForm(value));
+  const closeForm = () => dispatch(toggleForm(false));
 
   return showModal ? (
     <>
-      <div className={css.overlay} onClick={() => closeForm(false)} />
-      <RegisterForm />
+      <div className={css.overlay} onClick={closeForm} />
+      <RegisterForm closeForm={closeForm} />
     </>
   ) : (
     <></>
