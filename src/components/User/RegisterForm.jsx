@@ -1,12 +1,19 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { register } from "../redux/user/userSlice.js";
 
 import css from "../../styles/User.module.css";
+import toast from "react-hot-toast";
 
 const RegisterForm = ({ closeForm }) => {
+  const dispatch = useDispatch();
+
   const [errors, setErrors] = useState({
     email: "",
     name: "",
     password: "",
+    avatar: "",
   });
 
   const [values, setValues] = useState({
@@ -35,12 +42,23 @@ const RegisterForm = ({ closeForm }) => {
     if (!values.email) newErrors.email = "Email is required!";
     if (!values.name) newErrors.name = "Name is required!";
     if (!values.password) newErrors.password = "Password is required!";
+    if (!values.avatar) newErrors.avatar = "Avatar is required!";
 
     // якщо є помилки, оновлюємо стан і не виконуємо сабміт
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
+
+    dispatch(register(values));
+    closeForm();
+    toast.success("Registration is successfully!", {
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   return (
@@ -97,8 +115,10 @@ const RegisterForm = ({ closeForm }) => {
             name="avatar"
             value={values.avatar}
             autoComplete="off"
+            required
             onChange={handleChange}
           />
+          {errors.avatar && <p className={css.error}>{errors.avatar}</p>}
         </div>
         <div className={css.link}>I already have an account</div>
         <button className={css.submit} type="submit">

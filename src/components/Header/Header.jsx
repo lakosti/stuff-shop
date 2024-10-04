@@ -35,10 +35,19 @@ const Header = () => {
             className={css.avatar}
             style={{
               backgroundSize: "auto",
-              backgroundImage: `url(${avatar})`,
+              backgroundPosition: "center",
+
+              backgroundImage: currentUser
+                ? `url(${currentUser.avatar})`
+                : `url(${avatar})`,
             }}
           />
-          <div className={css.username}>Guest</div>
+          <div className={css.username}>
+            {currentUser
+              ? currentUser.name.charAt(0).toUpperCase() +
+                currentUser.name.slice(1)
+              : "Guest"}
+          </div>
         </div>
 
         <form className={css.form}>
