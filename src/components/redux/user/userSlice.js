@@ -14,13 +14,22 @@ const initialState = {
   showModal: false,
 };
 
+//*common fn
+const currentUser = (state, { payload }) => {
+  state.currentUser = payload; //payload -  дані конкретного юзера
+  state.isLoading = false;
+};
+
 //slice -- УПРАВЛІННЯ СХОВИЩЕМ
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     toggleForm: (state, { payload }) => {
-      state.showModal = payload;
+      state.showModal = payload; //payload - ті дані які ми самі передаємо
+    },
+    toggleFormType: (state, { payload }) => {
+      state.formType = payload;
     },
     addToFavourites: (state, { payload }) => {
       //*створюємо копію щоб не мутувати ориг стейт (і не перезаписувати кожного разу значення)
@@ -75,10 +84,8 @@ const userSlice = createSlice({
     builder.addCase(register.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(register.fulfilled, (state, action) => {
-      state.currentUser = action.payload; //дані юзера при реєстрації будуть в payload
-      state.isLoading = false;
-    });
+    builder.addCase(register.fulfilled, currentUser);
+    builder.addCase(login.fulfilled, currentUser);
   },
 });
 
@@ -89,13 +96,38 @@ export const register = createAsyncThunk(
   async (body, thunkAPI) => {
     try {
       const res = await axios.post(`${BASE_URL}/users`, body); //body -- тіло запиту
-      return res.data; //повертаємо перші 5 категорій
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-export const { addToCart, addToFavourites, toggleForm } = userSlice.actions; //власний редюсер
+export const login = createAsyncThunk(
+  "users/loginUser",
+  async (body, thunkAPI) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/auth/login`, body); //auth/login -- адреса бекенду на яку потрібно посилатися при логіні
+
+      // якщо немає токена, викидати помилку
+      if (!res.access_token) {
+        throw new Error("Invalid credentials");
+      }
+
+      //*нам певертається access/refresh token, які нам потрібно в гет запросі передати в хедерах на адресу реєстрації
+
+      const token = await axios.get(`${BASE_URL}/auth/profile`, {
+        headers: { Authorization: `Bearer${res.access_token}` },
+      });
+
+      return token.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const { addToCart, addToFavourites, toggleForm, toggleFormType } =
+  userSlice.actions; //власний редюсер
 
 export default userSlice.reducer;

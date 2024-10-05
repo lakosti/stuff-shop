@@ -6,7 +6,7 @@ import { register } from "../redux/user/userSlice.js";
 import css from "../../styles/User.module.css";
 import toast from "react-hot-toast";
 
-const RegisterForm = ({ closeForm }) => {
+const RegisterForm = ({ switchFormType, closeForm }) => {
   const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({
@@ -50,8 +50,10 @@ const RegisterForm = ({ closeForm }) => {
       return;
     }
 
+    //*діспатчимо реєстрацію юзера (пост запит)
     dispatch(register(values));
     closeForm();
+
     toast.success("Registration is successfully!", {
       style: {
         borderRadius: "10px",
@@ -120,7 +122,9 @@ const RegisterForm = ({ closeForm }) => {
           />
           {errors.avatar && <p className={css.error}>{errors.avatar}</p>}
         </div>
-        <div className={css.link}>I already have an account</div>
+        <div className={css.link} onClick={() => switchFormType("login")}>
+          I already have an account
+        </div>
         <button className={css.submit} type="submit">
           Create an account
         </button>

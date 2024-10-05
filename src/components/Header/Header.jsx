@@ -8,13 +8,23 @@ import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
 import { toggleForm } from "../redux/user/userSlice.js";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
 
-  //*потрібно зрозуміти чи є зараз залогінений користувач, якщо да показуємо модалку
+  //*потрібно зрозуміти чи є зараз залогінений користувач, якщо да показуємо
   const currentUser = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.user.cart);
+
+  //? підзавантажуємо дані з карент юзера
+  const [values, setValues] = useState({ name: "Guest", avatar: avatar });
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    setValues(currentUser);
+  }, [currentUser]);
 
   //*якщо немає юзера (не зареєстрований) покажи моддалку для реєстрації
   const handleClick = () => {
@@ -36,17 +46,20 @@ const Header = () => {
             style={{
               backgroundSize: "auto",
               backgroundPosition: "center",
+              backgroundImage: `url(${values.avatar})`,
 
-              backgroundImage: currentUser
-                ? `url(${currentUser.avatar})`
-                : `url(${avatar})`,
+              // backgroundImage: currentUser
+              //   ? `url(${currentUser.avatar})`
+              //   : `url(${avatar})`,
             }}
           />
           <div className={css.username}>
-            {currentUser
+            {values.name}
+
+            {/* {currentUser
               ? currentUser.name.charAt(0).toUpperCase() +
                 currentUser.name.slice(1)
-              : "Guest"}
+              : "Guest"} */}
           </div>
         </div>
 
