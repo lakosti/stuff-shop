@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { register } from "../redux/user/userSlice.js";
 
 import css from "../../styles/User.module.css";
-import toast from "react-hot-toast";
 
 const RegisterForm = ({ switchFormType, closeForm }) => {
   const dispatch = useDispatch();
@@ -53,14 +52,6 @@ const RegisterForm = ({ switchFormType, closeForm }) => {
     //*діспатчимо реєстрацію юзера (пост запит)
     dispatch(register(values));
     closeForm();
-
-    toast.success("Registration is successfully!", {
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
   };
 
   return (
@@ -120,6 +111,7 @@ const RegisterForm = ({ switchFormType, closeForm }) => {
             required
             onChange={handleChange}
           />
+          <p className={css.hint}>Avatar must be URL address*</p>
           {errors.avatar && <p className={css.error}>{errors.avatar}</p>}
         </div>
         <div className={css.link} onClick={() => switchFormType("login")}>

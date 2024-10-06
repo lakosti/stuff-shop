@@ -79,6 +79,10 @@ const userSlice = createSlice({
       // Оновлюємо стан 'cart' з новим значенням 'newCart'
       state.cart = newCart;
     },
+    logOut: (state, { payload }) => {
+      state.currentUser = null;
+      state.favourites = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(register.pending, (state) => {
@@ -86,6 +90,7 @@ const userSlice = createSlice({
     });
     builder.addCase(register.fulfilled, currentUser);
     builder.addCase(login.fulfilled, currentUser);
+    builder.addCase(update.fulfilled, currentUser);
   },
 });
 
@@ -98,7 +103,7 @@ export const register = createAsyncThunk(
       const res = await axios.post(`${BASE_URL}/users`, body); //body -- тіло запиту
       return res.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -110,14 +115,14 @@ export const login = createAsyncThunk(
       const res = await axios.post(`${BASE_URL}/auth/login`, body); //auth/login -- адреса бекенду на яку потрібно посилатися при логіні
 
       // якщо немає токена, викидати помилку
-      if (!res.access_token) {
-        throw new Error("Invalid credentials");
-      }
+      // if (!res.data.access_token) {
+      //   throw new Error("Invalid credentials");
+      // }
 
       //*нам певертається access/refresh token, які нам потрібно в гет запросі передати в хедерах на адресу реєстрації
 
-      const token = await axios.get(`${BASE_URL}/auth/profile`, {
-        headers: { Authorization: `Bearer${res.access_token}` },
+      const token = await axios(`${BASE_URL}/auth/profile`, {
+        headers: { Authorization: `Bearer ${res.data.access_token}` },
       });
 
       return token.data;
@@ -127,7 +132,25 @@ export const login = createAsyncThunk(
   }
 );
 
-export const { addToCart, addToFavourites, toggleForm, toggleFormType } =
-  userSlice.actions; //власний редюсер
+//*оновлення юзера
+export const update = createAsyncThunk(
+  "users/updateUser",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await axios.put(`${BASE_URL}/users/${payload.id}`, payload);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const {
+  addToCart,
+  addToFavourites,
+  toggleForm,
+  toggleFormType,
+  logOut,
+} = userSlice.actions; //власний редюсер
 
 export default userSlice.reducer;

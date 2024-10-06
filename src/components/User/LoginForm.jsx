@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/user/userSlice.js";
 
 import css from "../../styles/User.module.css";
-import toast from "react-hot-toast";
 
 const RegisterForm = ({ switchFormType, closeForm }) => {
   const dispatch = useDispatch();
@@ -47,14 +46,6 @@ const RegisterForm = ({ switchFormType, closeForm }) => {
     //*діспатчимо реєстрацію юзера (пост запит)
     dispatch(login(values));
     closeForm();
-
-    toast.success("Registration is successfully!", {
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
   };
 
   return (

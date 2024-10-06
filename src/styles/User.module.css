@@ -80,3 +80,8 @@
   color: rgb(137, 10, 10);
   font-size: 13px;
 }
+.hint {
+  color: var(--dark-sea);
+  font-size: 11px;
+  margin-top: 4px;
+}

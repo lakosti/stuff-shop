@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { ROUTES } from "../../utils/routes.js";
 
@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //*потрібно зрозуміти чи є зараз залогінений користувач, якщо да показуємо
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -20,15 +21,19 @@ const Header = () => {
   //? підзавантажуємо дані з карент юзера
   const [values, setValues] = useState({ name: "Guest", avatar: avatar });
 
+  //якщо оновлюється юзер оновлюються і дані // якщо юзера уже немає то задаємо значення за завмовчуванням
   useEffect(() => {
-    if (!currentUser) return;
-
-    setValues(currentUser);
+    if (currentUser) {
+      setValues(currentUser);
+    } else {
+      setValues({ name: "Guest", avatar: avatar });
+    }
   }, [currentUser]);
 
-  //*якщо немає юзера (не зареєстрований) покажи моддалку для реєстрації
+  //*якщо немає юзера (не зареєстрований) покажи моддалку для реєстрації,а якщо реєєстрований редікертни на профайл
   const handleClick = () => {
     if (!currentUser) dispatch(toggleForm(true));
+    else navigate(ROUTES.PROFILE);
   };
 
   return (
