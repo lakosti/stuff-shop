@@ -31,19 +31,24 @@ const userSlice = createSlice({
     toggleFormType: (state, { payload }) => {
       state.formType = payload;
     },
-    addToFavourites: (state, { payload }) => {
+    toggleFavourite: (state, { payload }) => {
       //*створюємо копію щоб не мутувати ориг стейт (і не перезаписувати кожного разу значення)
-
       let favList = [...state.favourites];
 
-      const item = favList.find(({ id }) => id === payload.id);
+      // const item = favList.find(({ id }) => id === payload.id);
 
-      if (!item) {
+      // *знаходимо індекс товару і якщо є індекс, то видаляєм по індексу, якщо немає то додаємо
+      const findIndex = favList.findIndex(({ id }) => id === payload.id);
+
+      if (findIndex === -1) {
         favList.push(payload);
+      } else {
+        favList.splice(findIndex, 1);
       }
 
       state.favourites = favList;
     },
+
     addToCart: (state, { payload }) => {
       // Розпилюємо існуючий масив 'cart', щоб створити новий масив 'newCart'
       // Це робиться для того, щоб уникнути мутації оригінального масиву та створити новий, з яким будемо працювати
@@ -147,7 +152,7 @@ export const update = createAsyncThunk(
 
 export const {
   addToCart,
-  addToFavourites,
+  toggleFavourite,
   toggleForm,
   toggleFormType,
   logOut,

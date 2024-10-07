@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { BASE_URL } from "../../../utils/constants.js";
-import { shuffle } from "../../../utils/common.js";
+import { buildUrl, shuffle } from "../../../utils/common.js";
 
 import axios from "axios";
 
@@ -11,6 +11,7 @@ const initialState = {
   filtered: [],
   related: [], //рекомендовані
   isLoading: false,
+  searchItems: [],
 };
 
 //slice -- УПРАВЛІННЯ СХОВИЩЕМ
@@ -21,6 +22,16 @@ const productsSlice = createSlice({
     filteredByPrice: (state, { payload }) => {
       //фільтруємо уже наявні в нас продукти і отримуємо ціну менше 100
       state.filtered = state.list.filter(({ price }) => price < payload); // у payload будемо класти ціну
+    },
+    filteredByTitle: (state, { payload }) => {
+      //якщо взагалі шось введено
+      if (payload) {
+        state.searchItems = state.list.filter(({ title }) =>
+          title.toLowerCase().includes(payload.toLowerCase())
+        );
+      } else {
+        state.searchItems = []; // скидаємо результати, якщо поле пошуку порожнє
+      }
     },
     getRelatedProducts: (state, { payload }) => {
       const list = state.list.filter(({ category: { id } }) => id === payload); //витягуємо id з category
@@ -71,6 +82,23 @@ export const getProductById = createAsyncThunk(
   }
 );
 
-export const { filteredByPrice, getRelatedProducts } = productsSlice.actions;
+//пошук по параметрах
+export const getProductsByParams = createAsyncThunk(
+  "products/getProducts",
+  async (params, thunkAPI) => {
+    try {
+      // const url = buildUrl(`${BASE_URL}/products/${params}`);
+      const url = buildUrl(`${BASE_URL}/products`, params);
+      const res = await axios.get(url);
+
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const { filteredByPrice, getRelatedProducts, filteredByTitle } =
+  productsSlice.actions;
 
 export default productsSlice.reducer;

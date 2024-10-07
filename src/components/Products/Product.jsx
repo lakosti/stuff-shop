@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../../utils/routes.js";
 
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { addToCart, addToFavourites } from "../redux/user/userSlice.js";
+import { addToCart, toggleFavourite } from "../redux/user/userSlice.js";
 
 import css from "../../styles/Product.module.css";
 
@@ -15,11 +15,15 @@ const SIZES = ["S", "M", "L"];
 const Product = (item) => {
   const { images, title, price, description, id } = item;
 
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const favourites = useSelector((state) => state.user.favourites);
+
   const dispatch = useDispatch();
 
   const [currentImg, setCurrentImg] = useState(); //змінюємо головну картинку
   const [currentSize, setCurrentSize] = useState("");
   const [purchase, setPurchase] = useState();
+  const [favourite, setFavourite] = useState(false);
 
   useEffect(() => {
     if (images.length > 0) {
@@ -36,6 +40,12 @@ const Product = (item) => {
 
     randomPurchases(30, 1);
   }, [id]);
+
+  //*перевірка чи є хоч один елемент по такому айді у fav list
+  useEffect(() => {
+    const isExists = favourites.some(({ id: favId }) => favId === id);
+    setFavourite(isExists);
+  }, [id, favourites]);
 
   const handleSizeSelect = (size) => {
     setCurrentSize(size); // Оновлюємо вибраний розмір
@@ -54,8 +64,20 @@ const Product = (item) => {
   };
 
   const handleAddToFavList = () => {
-    //!зробити перевірку чи залогінений користувач, якщо ні показувати модалку для реєстрації
-    dispatch(addToFavourites(item));
+    if (!currentUser) {
+      toast.error("Please login to add to favourites", {
+        icon: "⚠️",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      return;
+    }
+
+    dispatch(toggleFavourite(item));
+    setFavourite((prev) => !prev);
   };
 
   return (
@@ -109,7 +131,7 @@ const Product = (item) => {
             Add to cart
           </button>
           <button className={css.favourite} onClick={handleAddToFavList}>
-            Add to favourites
+            {favourite ? "Remove from favorites" : "Add to favorites"}
           </button>
         </div>
 

@@ -111,7 +111,9 @@
 .cart {
   position: relative;
 }
-
+.favourites {
+  position: relative;
+}
 .count {
   position: absolute;
   width: 14px;

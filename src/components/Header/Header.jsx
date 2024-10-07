@@ -1,27 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import { ROUTES } from "../../utils/routes.js";
+import { toggleForm } from "../redux/user/userSlice.js";
+import { filteredByTitle } from "../redux/products/productsSlice.js";
 
 import logo from "../../image/logo.svg";
 import avatar from "../../image/avatar.svg";
 
 import css from "../../styles/Header.module.css";
-import { toggleForm } from "../redux/user/userSlice.js";
-import { useEffect, useState } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //*потрібно зрозуміти чи є зараз залогінений користувач, якщо да показуємо
+  const [values, setValues] = useState({ name: "Guest", avatar: avatar });
+  const [searchValue, setSearchValue] = useState("");
+
   const currentUser = useSelector((state) => state.user.currentUser);
   const quantity = useSelector((state) => state.user.cart);
+  const favourites = useSelector((state) => state.user.favourites);
+  const items = useSelector((state) => state.products.searchItems);
 
-  //? підзавантажуємо дані з карент юзера
-  const [values, setValues] = useState({ name: "Guest", avatar: avatar });
-
-  //якщо оновлюється юзер оновлюються і дані // якщо юзера уже немає то задаємо значення за завмовчуванням
   useEffect(() => {
     if (currentUser) {
       setValues(currentUser);
@@ -30,10 +31,16 @@ const Header = () => {
     }
   }, [currentUser]);
 
-  //*якщо немає юзера (не зареєстрований) покажи моддалку для реєстрації,а якщо реєєстрований редікертни на профайл
   const handleClick = () => {
     if (!currentUser) dispatch(toggleForm(true));
     else navigate(ROUTES.PROFILE);
+  };
+
+  const handleSearch = (evt) => {
+    const value = evt.target.value;
+
+    setSearchValue(value);
+    dispatch(filteredByTitle(value));
   };
 
   return (
@@ -52,20 +59,9 @@ const Header = () => {
               backgroundSize: "auto",
               backgroundPosition: "center",
               backgroundImage: `url(${values.avatar})`,
-
-              // backgroundImage: currentUser
-              //   ? `url(${currentUser.avatar})`
-              //   : `url(${avatar})`,
             }}
           />
-          <div className={css.username}>
-            {values.name}
-
-            {/* {currentUser
-              ? currentUser.name.charAt(0).toUpperCase() +
-                currentUser.name.slice(1)
-              : "Guest"} */}
-          </div>
+          <div className={css.username}>{values.name}</div>
         </div>
 
         <form className={css.form}>
@@ -80,18 +76,44 @@ const Header = () => {
               name="search"
               placeholder="Search for anything..."
               autoComplete="off"
-              onChange={() => {}}
-              value=""
+              onChange={handleSearch}
+              value={searchValue}
             />
           </div>
-          {false && <div className={css.box}></div>}
+          {searchValue && items.length > 0 ? (
+            <div className={css.box}>
+              {items.map(({ title, images, id }) => (
+                <div
+                  key={id}
+                  onClick={() => {
+                    setSearchValue("");
+                    dispatch(filteredByTitle(""));
+                  }}
+                >
+                  <Link className={css.item} to={`/products/${id}`}>
+                    <div
+                      className={css.image}
+                      style={{ backgroundImage: `url(${images[0]})` }}
+                    ></div>
+                    <div className={css.title}>{title}</div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            searchValue && (
+              <div className={css.box}>
+                <p className={css.item}>Not found</p>
+              </div>
+            )
+          )}
         </form>
         <div className={css.account}>
-          <Link to={ROUTES.HOME} className={css.favourites}>
+          <Link to={ROUTES.FAVOURITES} className={css.favourites}>
             <svg className={css["icon-fav"]}>
-              {/* зберегти оригінальне ім'я  ["icon-fav"]*/}
               <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#heart`} />
             </svg>
+            <span className={css.count}>{favourites.length || 0}</span>
           </Link>
           <Link to={ROUTES.CART} className={css.cart}>
             <svg className={css["icon-cart"]}>
