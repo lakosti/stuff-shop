@@ -12,6 +12,7 @@ const initialState = {
   related: [], //рекомендовані
   isLoading: false,
   searchItems: [],
+  categoriesList: [],
 };
 
 //slice -- УПРАВЛІННЯ СХОВИЩЕМ
@@ -33,6 +34,11 @@ const productsSlice = createSlice({
         state.searchItems = []; // скидаємо результати, якщо поле пошуку порожнє
       }
     },
+    // filteredByCategory: (state, { payload }) => {
+    //   state.categoriesList = state.list.filter(
+    //     ({ category: { id } }) => id === payload
+    //   );
+    // },
     getRelatedProducts: (state, { payload }) => {
       const list = state.list.filter(({ category: { id } }) => id === payload); //витягуємо id з category
       //в payload ми сам кладемо дані -  і це буде id
@@ -43,8 +49,9 @@ const productsSlice = createSlice({
     builder.addCase(getProducts.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(getProducts.fulfilled, (state, action) => {
-      state.list = action.payload; //записуємо в list дані з акшену
+    builder.addCase(getProducts.fulfilled, (state, { payload }) => {
+      state.list = payload; //записуємо в list дані з акшену
+
       state.isLoading = false;
     });
     builder.addCase(getProducts.rejected, (state) => {

@@ -27,8 +27,6 @@ const SingleProduct = () => {
   // const list = useSelector((state) => state.products.list);
   const { related, list } = useSelector(({ products }) => products);
 
-  const loading = useSelector((state) => state.products.isLoading);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

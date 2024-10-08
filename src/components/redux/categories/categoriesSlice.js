@@ -8,6 +8,7 @@ import axios from "axios";
 const initialState = {
   list: [],
   isLoading: false,
+  currentCategory: [],
 };
 
 //slice -- УПРАВЛІННЯ СХОВИЩЕМ
@@ -18,8 +19,12 @@ const categoriesSlice = createSlice({
     builder.addCase(getCategories.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(getCategories.fulfilled, (state, action) => {
-      state.list = action.payload; //записуємо в categoriesList дані з акшену (асинхрон функції) // результат роботи функції
+    builder.addCase(getCategories.fulfilled, (state, { payload }) => {
+      state.list = payload; //записуємо в categoriesList дані з акшену (асинхрон функції) // результат роботи функції
+      // state.currentCategory = state.currentCategory.filter(
+      //   ({ id }) => id === payload
+      // );
+      // state.currentCategory.push(payload);
       state.isLoading = false;
     });
     builder.addCase(getCategories.rejected, (state) => {
@@ -29,14 +34,29 @@ const categoriesSlice = createSlice({
 });
 
 //async fn -- ЗАПИТ ДО БАЗИ
-export const getCategories = createAsyncThunk("categories/getCategories", async (_, thunkAPI) => {
-  try {
-    const res = await axios.get(`${BASE_URL}/categories`);
-    return res.data.slice(0, 5); //повертаємо перші 5 категорій
-  } catch (error) {
-    console.log(error);
-    return thunkAPI.rejectWithValue(error);
+export const getCategories = createAsyncThunk(
+  "categories/getCategories",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/categories`);
+      return res.data.slice(0, 5); //повертаємо перші 5 категорій
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
+export const getCategoriesById = createAsyncThunk(
+  "category/getCategory",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/categories/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export default categoriesSlice.reducer;
